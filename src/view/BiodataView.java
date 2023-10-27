@@ -3,90 +3,80 @@ package view;
 import javax.swing.*;
 
 import entity.Biodata;
-import utils.AddComponentsUtil;
-import utils.TableUtil;
-
-import java.awt.*;
-import java.util.ArrayList;
-import java.util.Arrays;
+import utils.ActionManagerUtil;
+import utils.components.AddComponentsManagerUtil;
+import utils.components.ComponentManagerUtil;
+import utils.TableManagerUtil;
 
 public class BiodataView extends JFrame {
+    private ComponentManagerUtil componentManager;
+    private ActionManagerUtil actionManager;
+    private JLabel labelNama, labelNomorHP, labelJenisKelamin, labelAlamat;
+    private JTextField textFieldNama, textFieldNomorHP;
+    private JRadioButton radio1, radio2;
+    private JTextArea textAreaAlamat;
+    private JScrollPane scrollPane;
+    private JButton btnSimpan, btnEdit, btnHapus, btnSimpanFile;
+    private JTable table;
+    private TableManagerUtil tableUtil;
+    private TableManagerUtil tableModel;
 
     public BiodataView() {
+        componentManager = new ComponentManagerUtil();
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        initializeComponents();
+        addActionListeners();
+        addComponentsToFrame();
+        this.setSize(1000, 800);
+        this.setLayout(null);
+    }
 
-        // Menutup aplikasi saat mengklik tombol close
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    public void initializeComponents() {
+        labelNama = componentManager.createLabel("Nama: ", 15, 40);
+        textFieldNama = componentManager.createTextField(15, 60);
 
-        JLabel labelNama = new JLabel("Nama: ");
-        labelNama.setBounds(15, 40, 350, 10);
+        labelNomorHP = componentManager.createLabel("Nomor HP: ", 15, 100);
+        textFieldNomorHP = componentManager.createTextField(15, 120);
 
-        JTextField  textFieldNama = new JTextField();
-        textFieldNama.setBounds(15, 60, 350, 30);
+        labelJenisKelamin = componentManager.createLabel("Jenis Kelamin: ", 15, 160);
+        radio1 = componentManager.createRadioButton("Laki-laki", 15, 170);
+        radio2 = componentManager.createRadioButton("Perempuan", 15, 190);
 
-        JLabel labelNomorHP = new JLabel("Nomor HP: ");
-        labelNomorHP.setBounds(15, 100, 350, 10);
-
-        JTextField textFieldNomorHP = new JTextField();
-        textFieldNomorHP.setBounds(15, 120, 350, 30);
-
-        JLabel labelJenisKelamin = new JLabel("Jenis Kelamin: ");
-        labelJenisKelamin.setBounds(15, 160, 350, 10);
-
-        JRadioButton radio1 = new JRadioButton("Laki-laki");
-        radio1.setBounds(15, 170, 350, 30);
-
-        JRadioButton radio2 = new JRadioButton("Perempuan");
-        radio2.setBounds(15, 190, 350, 30);
-
-        JLabel labelAlamat = new JLabel("Alamat: ");
-        labelAlamat.setBounds(15, 230, 350, 10);
-
-        JTextArea textAreaAlamat = new JTextArea();
-        textAreaAlamat.setBounds(15, 250, 350, 100);
-        textAreaAlamat.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        labelAlamat = componentManager.createLabel("Alamat: ", 15, 230);
+        textAreaAlamat = componentManager.createTextArea(15, 250);
 
         ButtonGroup group = new ButtonGroup();
         group.add(radio1);
         group.add(radio2);
 
-        JButton btnSimpan = new JButton("Simpan");
-        btnSimpan.setBounds(15, 370, 120, 40);
-        btnSimpan.setLayout(new FlowLayout());
+        btnSimpan = componentManager.createButton("Simpan", 15, 370);
+        btnEdit = componentManager.createButton("Edit", 140, 370);
+        btnHapus = componentManager.createButton("Hapus", 265, 370);
+        btnSimpanFile = componentManager.createButton("Simpan Ke File", 390, 370);
 
-        JButton btnEdit = new JButton("Edit");
-        btnEdit.setBounds(140, 370, 120, 40);
-
-        JButton btnHapus = new JButton("Hapus");
-        btnHapus.setBounds(265, 370, 120, 40);
-
-        JButton btnSimpanFile = new JButton("Simpan Ke File");
-        btnSimpanFile.setBounds(390, 370, 120, 40);
-
-        javax.swing.JTable table = new javax.swing.JTable();
-        JScrollPane scrollPane = new JScrollPane(table);
+        table = new JTable();
+        scrollPane = new JScrollPane(table);
         scrollPane.setBounds(15, 420, 800, 300);
 
-        TableUtil tableModel = new TableUtil();
+        tableModel = new TableManagerUtil();
         table.setModel(tableModel);
+    }
 
-        btnSimpan.addActionListener(e -> {
-            int validation = JOptionPane.showConfirmDialog(null, "Apakah anda yakin ingin menyimpan data ini?", "Konfirmasi", JOptionPane.YES_NO_OPTION);
-            if (validation == JOptionPane.YES_OPTION) {
-                String nama = textFieldNama.getText();
-                String nomorHP = textFieldNomorHP.getText();
-                String jenisKelamin = radio1.isSelected() ? "Laki-laki" : "Perempuan";
-                String alamat = textAreaAlamat.getText();
+    public void addActionListeners() {
+        actionManager = new ActionManagerUtil(
+                textFieldNama,
+                textFieldNomorHP,
+                radio1,
+                textAreaAlamat,
+                tableModel
+        );
 
-                Biodata data = new Biodata(nama, nomorHP, jenisKelamin, alamat);
-                tableModel.addRow(data.toArrayList());
+        btnSimpan.addActionListener(actionManager.createSaveAction());
+    }
 
-                JOptionPane.showMessageDialog(null, "Data berhasil disimpan");
-            } else {
-                JOptionPane.showMessageDialog(null, "Anda membatalkan menyimpan data");
-            }
-        });
+    public void addComponentsToFrame() {
+        AddComponentsManagerUtil addComponentsUtil = new AddComponentsManagerUtil(this);
 
-        AddComponentsUtil addComponentsUtil = new AddComponentsUtil(this);
         addComponentsUtil.add(
                 labelNama,
                 textFieldNama,
@@ -103,8 +93,5 @@ public class BiodataView extends JFrame {
                 btnHapus,
                 btnSimpanFile
         );
-
-        this.setSize(1000, 800);
-        this.setLayout(null);
     }
 }

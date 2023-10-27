@@ -4,7 +4,7 @@ import javax.swing.table.AbstractTableModel;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TableUtil extends AbstractTableModel {
+public class TableManagerUtil extends AbstractTableModel {
 
     private String[] columnNames = {"Nama", "No HP", "Jenis Kelamin", "Alamat"};
     private ArrayList<ArrayList<String>> data = new ArrayList<ArrayList<String>>();

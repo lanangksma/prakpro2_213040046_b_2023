@@ -1,11 +1,11 @@
-package utils;
+package utils.components;
 
 import javax.swing.*;
 
-public class AddComponentsUtil {
+public class AddComponentsManagerUtil {
     private JFrame frame;
 
-    public AddComponentsUtil(JFrame frame){
+    public AddComponentsManagerUtil(JFrame frame){
         this.frame = frame;
     }
 
