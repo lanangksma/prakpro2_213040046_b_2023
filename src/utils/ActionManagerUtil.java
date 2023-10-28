@@ -49,7 +49,7 @@ public class ActionManagerUtil {
             }
 
             writer.close();
-            JOptionPane.showMessageDialog(null, "Data berhasil disimpan ke file\nCek file Biodata.txt di folder src");
+            JOptionPane.showMessageDialog(null, "Data berhasil disimpan ke file\nCek file Biodata.txt di folder project");
         } catch (IOException ex) {
             JOptionPane.showMessageDialog(null, "Terjadi kesalahan saat menyimpan ke file");
         }
