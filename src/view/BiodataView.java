@@ -1,12 +1,17 @@
 package view;
 
 import javax.swing.*;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableColumnModel;
 
 import entity.Biodata;
 import utils.ActionManagerUtil;
 import utils.components.AddComponentsManagerUtil;
 import utils.components.ComponentManagerUtil;
 import utils.TableManagerUtil;
+
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class BiodataView extends JFrame {
     private ComponentManagerUtil componentManager;
@@ -17,13 +22,27 @@ public class BiodataView extends JFrame {
     private JTextArea textAreaAlamat;
     private JScrollPane scrollPane;
     private JButton btnSimpan, btnEdit, btnHapus, btnSimpanFile;
+    private JFrame frame;
     private JTable table;
     private TableManagerUtil tableUtil;
     private TableManagerUtil tableModel;
 
     public BiodataView() {
+        this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        this.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                int confirm = JOptionPane.showConfirmDialog(
+                        null, "Apakah Anda yakin ingin keluar dari aplikasi?",
+                        "Konfirmasi", JOptionPane.YES_NO_OPTION
+                );
+                if (confirm == JOptionPane.YES_OPTION) {
+                    System.exit(0);
+                }
+            }
+        });
+        this.setTitle("213040046 - FORM BIODATA SEDERHANA JFRAME");
         componentManager = new ComponentManagerUtil();
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         initializeComponents();
         addActionListeners();
         addComponentsToFrame();
@@ -41,6 +60,7 @@ public class BiodataView extends JFrame {
         labelJenisKelamin = componentManager.createLabel("Jenis Kelamin: ", 15, 160);
         radio1 = componentManager.createRadioButton("Laki-laki", 15, 170);
         radio2 = componentManager.createRadioButton("Perempuan", 15, 190);
+        radio2.setSelected(true);
 
         labelAlamat = componentManager.createLabel("Alamat: ", 15, 230);
         textAreaAlamat = componentManager.createTextArea(15, 250);
@@ -60,6 +80,11 @@ public class BiodataView extends JFrame {
 
         tableModel = new TableManagerUtil();
         table.setModel(tableModel);
+
+        TableColumnModel columnModel = table.getColumnModel();
+
+        TableColumn idcolumn = columnModel.getColumn(0);
+        idcolumn.setPreferredWidth(1);
     }
 
     public void addActionListeners() {
@@ -72,6 +97,9 @@ public class BiodataView extends JFrame {
         );
 
         btnSimpan.addActionListener(actionManager.createSaveAction());
+        btnEdit.addActionListener(actionManager.createEditAction());
+        btnHapus.addActionListener(actionManager.createClearAction());
+        btnSimpanFile.addActionListener(actionManager.createSaveFileAction());
     }
 
     public void addComponentsToFrame() {

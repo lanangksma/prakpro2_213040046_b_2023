@@ -6,7 +6,7 @@ import java.util.List;
 
 public class TableManagerUtil extends AbstractTableModel {
 
-    private String[] columnNames = {"Nama", "No HP", "Jenis Kelamin", "Alamat"};
+    private String[] columnNames = {"ID", "Nama", "No HP", "Jenis Kelamin", "Alamat"};
     private ArrayList<ArrayList<String>> data = new ArrayList<ArrayList<String>>();
 
     @Override
@@ -34,12 +34,33 @@ public class TableManagerUtil extends AbstractTableModel {
     }
 
     public void addRow(ArrayList<String> value) {
+        value.add(0, String.valueOf(data.size() + 1));
+
         data.add(value);
         fireTableRowsInserted(getRowCount() - 1, getRowCount() - 1);
     }
 
-    public void removeRow(int rowIndex) {
-        data.remove(rowIndex);
-        fireTableRowsDeleted(rowIndex, rowIndex);
+    public void editRow(int rowIndex, ArrayList<String> newValue) {
+        if(rowIndex >= 0 && rowIndex < getRowCount()) {
+            data.set(rowIndex, newValue);
+            fireTableRowsUpdated(rowIndex, rowIndex);
+        }
     }
+
+    public ArrayList<ArrayList<String>> getData() {
+        return data;
+    }
+
+    public ArrayList<String> getRow(int rowIndex) {
+        return data.get(rowIndex);
+    }
+
+    public void clearTable() {
+        int rowCount = getRowCount();
+        if(rowCount > 0) {
+            data.clear();
+            fireTableRowsDeleted(0, rowCount - 1);
+        }
+    }
+
 }
